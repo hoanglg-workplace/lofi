@@ -1,0 +1,18 @@
+.play-btn,
+.skip-btn {
+  background: transparent;
+  border: none;
+}
+
+
+@media screen and (max-width: 1024px) {
+  .music-player {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 120%;
+  }
+  // .music-player--controls {
+  //   width: 120%;
+  // }
+}
