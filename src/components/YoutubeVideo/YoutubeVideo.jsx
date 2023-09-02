@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import './YoutubeVideo.scss';
 import ReactPlayer from 'react-player';
 

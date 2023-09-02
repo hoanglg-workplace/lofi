@@ -1,24 +1,30 @@
 import React, { useState } from "react";
 import ReactAudioPlayer from "react-audio-player";
 import "./RainToggleButton.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { updateRain, updateRainValue} from "../../redux/features/homeSlice";
 
-const RainToggleButton = (props) => {
+const RainToggleButton = () => {
   const [rainVolume, setRainVolume] = useState(0);
+
+  const homeState = useSelector((state) => state.home);
+  const { rain } = homeState;
+  const dispatch = useDispatch();
 
   const rainButtonHandler = () => {
     if (rainVolume === 0) {
       setRainVolume(30);
-      props.setRainValue(30)
+      dispatch(updateRainValue(30))
     } else {
       setRainVolume(0);
-      props.setRainValue(0)
+      dispatch(updateRainValue(0))
     }
-    props.setRain(!props.rain);
+    dispatch(updateRain(!rain))
   };
 
   return (
     <div className="wrapper">
-      {props.rain && (
+      {rain && (
         <ReactAudioPlayer
           preload="auto"
           autoPlay

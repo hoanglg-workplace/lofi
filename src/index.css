@@ -1,6 +1,6 @@
 body {
-  overflow-y: scroll;
-  overflow-x: hidden;
+  /* overflow-y: scroll; */
+  /* overflow-x: hidden; */
   /* // Disable Text Selection */
   user-select: none;
   -webkit-user-select: none;
@@ -9,7 +9,13 @@ body {
   -ms-user-select: none;
 }
 
-:root,
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* :root,
 body,
 html {
   background-color: black;
@@ -41,9 +47,8 @@ ul {
   font-size: 100%;
   vertical-align: baseline;
   background: transparent;
-  /* text-decoration: none; */
 }
 
 body {
   font-family: Arial, sans-serif;
-}
+} */

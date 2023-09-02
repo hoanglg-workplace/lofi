@@ -1,18 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 import Footer from "../Footer/Footer";
 import ModifierBoard from "../ModifierBoard/ModifierBoard";
 import RainToggleButton from "../RainToggleButton/RainToggleButton";
 import YoutubeVideo from "../YoutubeVideo/YoutubeVideo";
 import "./Home.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { updateRain } from "../../redux/features/homeSlice";
 
-const Home = (props) => {
-  const [rain, setRain] = useState(false);
+const Home = () => {
   // props from RainToggleButton
-  const [rainValueProp, setRainValueProp] = useState(0);
-  const [volumeValueProp, setVolumeValueProp] = useState(50);
-  const [moodModeProp, setMoodModeProp] = useState("chill");
+  const appState = useSelector((state) => state.app);
+  const { darkLightSwitch } = appState;
+  const homeState = useSelector((state) => state.home);
+  const { rain } = homeState;
+  const dispatch = useDispatch();
 
-  let { darkLightMode } = props.darkLightSwitch;
+  let { darkLightMode } = darkLightSwitch;
   let { rainMode } = rain;
 
   if (!rain) {
@@ -21,7 +24,7 @@ const Home = (props) => {
     rainMode = "rain";
   }
 
-  if (!props.darkLightSwitch) {
+  if (!darkLightSwitch) {
     darkLightMode = "day";
   } else {
     darkLightMode = "night";
@@ -30,8 +33,8 @@ const Home = (props) => {
   const combineMode = `${darkLightMode}-${rainMode}`;
 
   return (
-    <div>
-    <img className="img_logo" src="./hoang_logo.png" alt="" />
+    <div className="Home_wrapper">
+      {/* <img className="img_logo" src="./hoang_logo.png" alt="" /> */}
 
       {/* Day */}
       <video
@@ -71,32 +74,10 @@ const Home = (props) => {
       </video>
       {/* End Night */}
 
-      <RainToggleButton
-        onClick={() => setRain(!rain)}
-        rain={rain}
-        setRain={setRain}
-        rainValue={rainValueProp}
-        setRainValue={setRainValueProp}
-      />
-      <ModifierBoard
-        rainMode={rainMode}
-        rain={rain}
-        setRain={setRain}
-        //
-        rainValue={rainValueProp}
-        setRainValue={setRainValueProp}
-        moodModeValue={moodModeProp}
-        setMoodModeValue={setMoodModeProp}
-        volumeValue={volumeValueProp}
-        setVolumeValue={setVolumeValueProp}
-      />
+      <RainToggleButton onClick={() => dispatch(updateRain(!rain))} />
+      <ModifierBoard rainMode={rainMode} />
       <YoutubeVideo />
-      <Footer
-        moodModeValue={moodModeProp}
-        setMoodModeValue={setMoodModeProp}
-        volumeValue={volumeValueProp}
-        setVolumeValue={setVolumeValueProp}
-      />
+      <Footer />
     </div>
   );
 };

@@ -7,13 +7,16 @@
   button {
     margin-top: 10px;
     margin-left: 5px;
-    background: #14141d;
-    color: #4e5054;
+    background: #fff;
+    padding: 2px 10px;
+    color: #000;
     border: none;
     border-radius: 5px;
 
     &:hover {
       color: white;
+    background: #000;
+
     }
   }
 

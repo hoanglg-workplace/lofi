@@ -1,45 +1,71 @@
-import React, { useState } from "react";
+import React from "react";
 import Stack from "@mui/material/Stack";
 import Slider from "@mui/material/Slider";
 import ReactAudioPlayer from "react-audio-player";
 import "./ModifierBoard.scss";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  updateMoodMode,
+  updateRain,
+  updateRainValue,
+  updateVolumeValue,
+} from "../../redux/features/homeSlice";
+import {
+  updateCityTraffic,
+  updateFan,
+  updateFireplace,
+  updateForestNight,
+  updateOpenMood,
+  updatePeople,
+  updateRainForest,
+  updateRiver,
+  updateSnow,
+  updateSummerStorm,
+  updateWave,
+  updateWind,
+} from "../../redux/features/modifierBoardSlice";
 
-const ModifierBoard = (props) => {
-  const [openMood, setOpenMood] = useState(false);
-
-  const [cityTraffic, setCityTraffic] = useState(0);
-  const [fireplace, setFireplace] = useState(0);
-  const [snow, setSnow] = useState(0);
-  const [summerStorm, setSummerStorm] = useState(0);
-  const [fan, setFan] = useState(0);
-  const [forestNight, setForestNight] = useState(0);
-  const [wave, setWave] = useState(0);
-  const [wind, setWind] = useState(0);
-  const [people, setPeople] = useState(0);
-  const [river, setRiver] = useState(0);
-  const [rainForest, setRainForest] = useState(0);
+const ModifierBoard = () => {
+  const homeState = useSelector((state) => state.home);
+  const { rainValue, volumeValue, moodMode } = homeState;
+  const modifierBoardState = useSelector((state) => state.modifierBoard);
+  const {
+    openMood,
+    cityTraffic,
+    fireplace,
+    snow,
+    summerStorm,
+    fan,
+    forestNight,
+    wave,
+    wind,
+    people,
+    river,
+    rainForest,
+  } = modifierBoardState;
+  const dispatch = useDispatch();
 
   const rainSliderHandler = (e) => {
     if (e.target.value > 0) {
-      props.setRain(true);
+      dispatch(updateRain(true));
     } else if (e.target.value === 0) {
-      props.setRain(false);
+      dispatch(updateRain(false));
     }
-    props.setRainValue(e.target.value);
+    dispatch(updateRainValue(e.target.value));
   };
 
   const openMoodHandler = () => {
-    setOpenMood(!openMood);
+    dispatch(updateOpenMood(!openMood));
   };
 
   const changeMoodHandler = (e) => {
     // setMoodMode(e.target.id);
-    props.setMoodModeValue(e.target.id)
+    dispatch(updateMoodMode(e.target.id));
   };
 
   const changeVolumeHandler = (e) => {
     // setVolume(e.target.value)
-    props.setVolumeValue(e.target.value);
+    dispatch(updateVolumeValue(e.target.value));
   };
 
   return (
@@ -67,7 +93,7 @@ const ModifierBoard = (props) => {
             autoPlay
             src="./assets/musics/rain_city.mp3"
             loop
-            volume={props.rainValue / 100}
+            volume={rainValue / 100}
           />
         </div>
       )}
@@ -83,7 +109,7 @@ const ModifierBoard = (props) => {
                 <div
                   id="sleep"
                   onClick={changeMoodHandler}
-                  className={`item ` + (props.moodModeValue === "sleep" ? "active" : "")}
+                  className={`item ` + (moodMode === "sleep" ? "active" : "")}
                 >
                   <i id="sleep" className="fas fa-moon fa-2x"></i>
                   <span id="sleep">Sleep</span>
@@ -91,7 +117,7 @@ const ModifierBoard = (props) => {
                 <div
                   id="jazzy"
                   onClick={changeMoodHandler}
-                  className={`item ` + (props.moodModeValue === "jazzy" ? "active" : "")}
+                  className={`item ` + (moodMode === "jazzy" ? "active" : "")}
                 >
                   <i id="jazzy" className="fas fa-guitar fa-2x"></i>
                   <span id="jazzy">Jazzy</span>
@@ -99,7 +125,7 @@ const ModifierBoard = (props) => {
                 <div
                   id="chill"
                   onClick={changeMoodHandler}
-                  className={`item ` + (props.moodModeValue === "chill" ? "active" : "")}
+                  className={`item ` + (moodMode === "chill" ? "active" : "")}
                 >
                   <i id="chill" className="fas fa-coffee fa-2x"></i>
                   <span id="chill">Chill</span>
@@ -112,14 +138,13 @@ const ModifierBoard = (props) => {
                   sx={{ mb: 1 }}
                   alignItems="center"
                 >
-                  <i className="fas fa-volume-down fa-lg"></i>
+                  <i onClick={() => dispatch(updateVolumeValue(0))} className="fas fa-volume-down fa-lg"></i>
                   <Slider
                     className="volume-slider"
-                    value={props.volumeValue}
-
+                    value={volumeValue}
                     onChange={changeVolumeHandler}
                   />
-                  <i className="fas fa-volume-up fa-lg"></i>
+                  <i onClick={() => dispatch(updateVolumeValue(100))} className="fas fa-volume-up fa-lg"></i>
                 </Stack>
               </div>
               <h5>Background Noise</h5>
@@ -136,7 +161,9 @@ const ModifierBoard = (props) => {
                   <Slider
                     className="slider"
                     value={cityTraffic}
-                    onChange={(e) => setCityTraffic(e.target.value)}
+                    onChange={(e) =>
+                      dispatch(updateCityTraffic(e.target.value))
+                    }
                   />
                 </div>
                 <div className="noise-option">
@@ -146,11 +173,11 @@ const ModifierBoard = (props) => {
                     autoPlay
                     src="./assets/musics/rain_city.mp3"
                     loop
-                    volume={props.rainValue / 100}
+                    volume={rainValue / 100}
                   />
                   <Slider
                     className="slider"
-                    value={props.rainValue}
+                    value={rainValue}
                     onChange={rainSliderHandler}
                   />
                 </div>
@@ -166,7 +193,7 @@ const ModifierBoard = (props) => {
                   <Slider
                     className="slider"
                     value={fireplace}
-                    onChange={(e) => setFireplace(e.target.value)}
+                    onChange={(e) => dispatch(updateFireplace(e.target.value))}
                   />
                 </div>
                 <div className="noise-option">
@@ -181,7 +208,7 @@ const ModifierBoard = (props) => {
                   <Slider
                     className="slider"
                     value={snow}
-                    onChange={(e) => setSnow(e.target.value)}
+                    onChange={(e) => dispatch(updateSnow(e.target.value))}
                   />
                 </div>
                 <div className="noise-option">
@@ -196,7 +223,9 @@ const ModifierBoard = (props) => {
                   <Slider
                     className="slider"
                     value={summerStorm}
-                    onChange={(e) => setSummerStorm(e.target.value)}
+                    onChange={(e) =>
+                      dispatch(updateSummerStorm(e.target.value))
+                    }
                   />
                 </div>
                 <div className="noise-option">
@@ -211,7 +240,7 @@ const ModifierBoard = (props) => {
                   <Slider
                     className="slider"
                     value={fan}
-                    onChange={(e) => setFan(e.target.value)}
+                    onChange={(e) => dispatch(updateFan(e.target.value))}
                   />
                 </div>
                 <div className="noise-option">
@@ -226,7 +255,9 @@ const ModifierBoard = (props) => {
                   <Slider
                     className="slider"
                     value={forestNight}
-                    onChange={(e) => setForestNight(e.target.value)}
+                    onChange={(e) =>
+                      dispatch(updateForestNight(e.target.value))
+                    }
                   />
                 </div>
                 <div className="noise-option">
@@ -241,7 +272,7 @@ const ModifierBoard = (props) => {
                   <Slider
                     className="slider"
                     value={wave}
-                    onChange={(e) => setWave(e.target.value)}
+                    onChange={(e) => dispatch(updateWave(e.target.value))}
                   />
                 </div>
                 <div className="noise-option">
@@ -256,7 +287,7 @@ const ModifierBoard = (props) => {
                   <Slider
                     className="slider"
                     value={wind}
-                    onChange={(e) => setWind(e.target.value)}
+                    onChange={(e) => dispatch(updateWind(e.target.value))}
                   />
                 </div>
                 <div className="noise-option">
@@ -271,7 +302,7 @@ const ModifierBoard = (props) => {
                   <Slider
                     className="slider"
                     value={people}
-                    onChange={(e) => setPeople(e.target.value)}
+                    onChange={(e) => dispatch(updatePeople(e.target.value))}
                   />
                 </div>
                 <div className="noise-option">
@@ -286,7 +317,7 @@ const ModifierBoard = (props) => {
                   <Slider
                     className="slider"
                     value={river}
-                    onChange={(e) => setRiver(e.target.value)}
+                    onChange={(e) => dispatch(updateRiver(e.target.value))}
                   />
                 </div>
                 <div className="noise-option">
@@ -301,7 +332,7 @@ const ModifierBoard = (props) => {
                   <Slider
                     className="slider"
                     value={rainForest}
-                    onChange={(e) => setRainForest(e.target.value)}
+                    onChange={(e) => dispatch(updateRainForest(e.target.value))}
                   />
                 </div>
               </div>
